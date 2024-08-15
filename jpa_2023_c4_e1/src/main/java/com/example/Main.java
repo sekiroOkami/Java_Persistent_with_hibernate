@@ -1,6 +1,9 @@
 package com.example;
 
 import com.example.entities.Employee;
+import com.example.entities.Product;
+import com.example.entities.Student;
+import com.example.entities.keys.StudentKey;
 import com.example.persistence.CustomPersistenceUnitInfo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -11,9 +14,36 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-//        findVsRef();
-//        refresh();
-        go("Rennala", "Raya Lucaria");
+        findVsRef();
+    }
+
+    private static void runStudent() {
+        var emf = getEntityManagerFactory();
+        try (EntityManager em = emf.createEntityManager()){
+            em.getTransaction().begin();
+            StudentKey id = new StudentKey();
+            id.setCode("ABC");
+            id.setNumber(10);
+
+            Student s1 = new Student();
+            s1.setId(id);
+            s1.setName("Sekiro");
+            em.persist(s1);
+            em.getTransaction().commit();
+        }
+    }
+
+    private static void runProduct() {
+        var emf = getEntityManagerFactory();
+        try (EntityManager em = emf.createEntityManager()){
+            em.getTransaction().begin();
+            Product p1 = new Product();
+            p1.setCode("abc");
+            p1.setNumber(10);
+            p1.setCode("Red");
+            em.persist(p1);
+            em.getTransaction().commit();
+        }
     }
 
     private static void go(String name, String add) {
@@ -49,10 +79,16 @@ public class Main {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
+            StudentKey id = new StudentKey();
+            id.setCode("ABC");
+            id.setNumber(10);
+
             // find vs getReference
-            var e1 = em.getReference(Employee.class, 1); // lazy , create shell and will sent query when it used
+//            var e1 = em.getReference(Employee.class, 1); // lazy , create shell and will sent query when it used
 //            var e1 = em.find(Employee.class, 1); // eager approach
-//            System.out.println("e1 = " + e1);
+
+            Student s = em.find(Student.class, id);
+            System.out.println("s = " + s);
 //            em.persist(e2);  // add this to the context  -> NOT AN INSERT QUERY
             em.getTransaction().commit(); // end of transaction
         }
