@@ -1,17 +1,20 @@
 package com.example;
 
 
+import com.example.entities.Product;
 import com.example.entities.ProductRepository;
 import com.example.interfaces.QueryFunction;
 import com.example.interfaces.TransactionalOperation;
 import com.example.persistence.CustomPersistenceUnitInfo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Main {
     public static void main(String[] args) {
@@ -39,11 +42,31 @@ public class Main {
 
 //            statistic(em);
 
-            String jpql = "SELECT p.name, p.price FROM Product p";
-            TypedQuery<Object[]> q = em.createQuery(jpql, Object[].class);
-            q.getResultList().forEach(objects -> {
-                System.out.println(objects[0] + ", " + objects[1]);
-            });
+//            String jpql = "SELECT p.name, p.price FROM Product p";
+//            go1(em);
+//            exception(em);
+
+        });
+    }
+
+    private static void exception(EntityManager em) {
+        String jpql = "SELECT p FROM Product p WHERE p.name LIKE 'Candy'";
+        TypedQuery<Product> q = em.createQuery(jpql, Product.class);
+        Optional<Product> product;
+        try {
+             product = Optional.of(q.getSingleResult()) ;// exception
+        } catch (NoResultException e) {
+            product = Optional.empty();
+            System.out.println("No product found!");
+        }
+        product.ifPresentOrElse(System.out::println, ()-> System.out.println("Product not found!"));
+    }
+
+    private static void go1(EntityManager em) {
+        String jpql = "SELECT p.name, AVG(p.price) FROM Product p GROUP BY p.name";
+        TypedQuery<Object[]> q = em.createQuery(jpql, Object[].class);
+        q.getResultList().forEach(objects -> {
+            System.out.println(objects[0] + ", " + objects[1]);
         });
     }
 
