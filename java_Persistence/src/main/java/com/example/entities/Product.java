@@ -4,7 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Order {
+public class Product {
+    @Id
+    private Long id;
+
+    private String name;
+
     public Long getId() {
         return id;
     }
@@ -13,6 +18,11 @@ public class Order {
         this.id = id;
     }
 
-    @Id
-    private Long id;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

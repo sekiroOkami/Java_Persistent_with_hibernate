@@ -2,16 +2,26 @@ package com.example.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
-public class Person {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private Passport passport;
+    @ManyToMany(mappedBy = "users")
+    private List<Group> groups;
+
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+    }
 
     public Long getId() {
         return id;
@@ -27,13 +37,5 @@ public class Person {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Passport getPassport() {
-        return passport;
-    }
-
-    public void setPassport(Passport passport) {
-        this.passport = passport;
     }
 }

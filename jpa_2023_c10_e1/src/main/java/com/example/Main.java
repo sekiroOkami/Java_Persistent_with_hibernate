@@ -1,31 +1,25 @@
 package com.example;
 
 
-import com.example.entities.Passport;
-import com.example.entities.Person;
+import com.example.entities.Group;
+import com.example.entities.User;
 import com.example.interfaces.TransactionalOperation;
 import com.example.persistence.CustomPersistenceUnitInfo;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.TypedQuery;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        personOperation();
+        postOperation();
     }
 
-    private static void personOperation() {
+    private static void postOperation() {
         go(em -> {
-            var person = new Person();
-            var passport = new Passport();
-            passport.setNumber("1234");
-            person.setName("Sekiro");
-            person.setPassport(passport);
-            em.persist(person);
+
         });
     }
 
