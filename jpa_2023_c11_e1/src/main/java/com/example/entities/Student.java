@@ -1,11 +1,18 @@
 package com.example.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
+@NamedQueries(
+    @NamedQuery(
+            name = "getAll",
+            query = """
+                    SELECT s FROM Student s, Enrollment WHERE s.id = e.student.id
+                    """
+    )
+)
 public class Student {
     @Id
     private Long id;
